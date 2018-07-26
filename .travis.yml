@@ -6,7 +6,7 @@ cache:
   - cache/
 notifications:
   email: false
-language: c
+language: cpp
 compiler: gcc
 env:
   global:
