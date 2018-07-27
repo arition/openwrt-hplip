@@ -20,6 +20,7 @@ install:
 - mkdir -p $TRAVIS_BUILD_DIR/local ; cd $TRAVIS_BUILD_DIR/local
 - wget "http://archive.ubuntu.com/ubuntu/pool/main/c/ccache/ccache_3.3.4-1_amd64.deb"
 - dpkg -x *.deb .
+- sudo apt install libusb-dev
 - mkdir -p $TRAVIS_BUILD_DIR/cache ; cd $TRAVIS_BUILD_DIR/cache
 - wget -c $SDK_URL
 - mkdir -p $TRAVIS_BUILD_DIR/sdk ; cd $TRAVIS_BUILD_DIR/sdk
@@ -28,7 +29,7 @@ install:
 - if [ "$OSVER" = "OpenWrt_15.05" ]; then tar xjf $FILE && SDK_DIR="OpenWrt-SDK-*"; elif [ "$OSVER" = "LEDE_17.01" ]; then tar Jxf $FILE && SDK_DIR="lede-sdk-*"; fi
 - cd $TRAVIS_BUILD_DIR/sdk/$SDK_DIR
 - mkdir package/$PACKAGE
-- ln -s $TRAVIS_BUILD_DIR/Makefile package/$PACKAGE/
+- ln -s $TRAVIS_BUILD_DIR/$PACKAGE/Makefile package/$PACKAGE/
 script:
 - export PATH=$TRAVIS_BUILD_DIR/local/usr/bin:$PATH
 - cd $TRAVIS_BUILD_DIR/sdk/$SDK_DIR
@@ -38,9 +39,15 @@ script:
 - TOOLCHAIN_DIR=$(basename `pwd`)
 - export PATH=$TRAVIS_BUILD_DIR/sdk/$SDK_DIR/staging_dir/$TOOLCHAIN_DIR/bin:$PATH
 - popd
+- echo "src-git cups https://github.com/arition/openwrt-cups.git" >> feeds.conf.default
 - ./scripts/feeds update packages >/dev/null
+- ./scripts/feeds update base >/dev/null
+- ./scripts/feeds update cups >/dev/null
+- ./scripts/feeds install cups
+- ./scripts/feeds install python-dev
+- ./scripts/feeds install libsane
 - make defconfig
-- make package/hplip/compile V=s
+- make package/$PACKAGE/compile V=s
 - find $TRAVIS_BUILD_DIR/sdk/$SDK_DIR/bin/
 - find . -name *hplip*.ipk -exec cp {} $TRAVIS_BUILD_DIR \;
 - cd $TRAVIS_BUILD_DIR/
