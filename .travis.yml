@@ -8,6 +8,10 @@ notifications:
   email: false
 language: cpp
 compiler: gcc
+addons:
+  apt:
+    packages:
+    - libusb-dev
 env:
   global:
   - PACKAGE=hplip
@@ -20,7 +24,6 @@ install:
 - mkdir -p $TRAVIS_BUILD_DIR/local ; cd $TRAVIS_BUILD_DIR/local
 - wget "http://archive.ubuntu.com/ubuntu/pool/main/c/ccache/ccache_3.3.4-1_amd64.deb"
 - dpkg -x *.deb .
-- sudo apt install libusb-dev
 - mkdir -p $TRAVIS_BUILD_DIR/cache ; cd $TRAVIS_BUILD_DIR/cache
 - wget -c $SDK_URL
 - mkdir -p $TRAVIS_BUILD_DIR/sdk ; cd $TRAVIS_BUILD_DIR/sdk
@@ -47,7 +50,7 @@ script:
 - ./scripts/feeds install python-dev
 - ./scripts/feeds install libsane
 - make defconfig
-- make package/$PACKAGE/compile V=s
+- make package/$PACKAGE/compile -j3
 - find $TRAVIS_BUILD_DIR/sdk/$SDK_DIR/bin/
 - find . -name *hplip*.ipk -exec cp {} $TRAVIS_BUILD_DIR \;
 - cd $TRAVIS_BUILD_DIR/
