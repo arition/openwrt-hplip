@@ -68,7 +68,7 @@ script:
 - ./scripts/feeds install python-dev
 - ./scripts/feeds install libsane
 - make defconfig
-- make package/$PACKAGE/compile -j3
+- make package/$PACKAGE/compile -j3 V=s
 - find $TRAVIS_BUILD_DIR/sdk/$SDK_DIR/bin/
 - find . -name *hplip*.ipk -exec cp {} $TRAVIS_BUILD_DIR \;
 - cd $TRAVIS_BUILD_DIR/
