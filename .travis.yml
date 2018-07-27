@@ -61,14 +61,12 @@ script:
 - export PATH=$TRAVIS_BUILD_DIR/sdk/$SDK_DIR/staging_dir/$TOOLCHAIN_DIR/bin:$PATH
 - popd
 - echo "src-git cups https://github.com/arition/openwrt-cups.git" >> feeds.conf.default
-- ./scripts/feeds update packages >/dev/null
-- ./scripts/feeds update base >/dev/null
-- ./scripts/feeds update cups >/dev/null
+- ./scripts/feeds update
 - ./scripts/feeds install cups
 - ./scripts/feeds install python-dev
 - ./scripts/feeds install libsane
 - make defconfig
-- make package/$PACKAGE/compile -j3 V=s
+- make package/$PACKAGE/compile -j3
 - find $TRAVIS_BUILD_DIR/sdk/$SDK_DIR/bin/
 - find . -name *hplip*.ipk -exec cp {} $TRAVIS_BUILD_DIR \;
 - cd $TRAVIS_BUILD_DIR/
