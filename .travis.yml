@@ -69,7 +69,10 @@ script:
 - if [ "$OSVER" = "OpenWrt_15.05" ]; then ./scripts/feeds install python; elif [ "$OSVER" = "LEDE_17.01" ]; then ./scripts/feeds install python-dev; fi
 - ./scripts/feeds install libsane
 - make defconfig
-- make package/$PACKAGE/compile
+- make package/python/compile -j3
+- make package/cups/compile -j3
+- make package/sane-backends/compile -j3
+- make package/$PACKAGE/compile V=s
 - find $TRAVIS_BUILD_DIR/sdk/$SDK_DIR/bin/
 - find . -name *hplip*.ipk -exec cp {} $TRAVIS_BUILD_DIR \;
 - cd $TRAVIS_BUILD_DIR/
