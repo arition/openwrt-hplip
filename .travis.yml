@@ -12,6 +12,7 @@ addons:
   apt:
     packages:
     - libusb-dev
+    - python2.7-dev
 env:
   global:
   - PACKAGE=hplip
@@ -61,7 +62,7 @@ script:
 - export PATH=$TRAVIS_BUILD_DIR/sdk/$SDK_DIR/staging_dir/$TOOLCHAIN_DIR/bin:$PATH
 - popd
 - echo "src-git cups https://github.com/arition/openwrt-cups.git" >> feeds.conf.default
-- ./scripts/feeds update
+- ./scripts/feeds update -a
 - ./scripts/feeds install cups
 - ./scripts/feeds install python-dev
 - ./scripts/feeds install libsane
