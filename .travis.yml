@@ -12,6 +12,7 @@ addons:
   apt:
     packages:
     - libusb-dev
+    - libusb-1.0-0-dev
     - python2.7-dev
 env:
   global:
@@ -64,7 +65,7 @@ script:
 - echo "src-git cups https://github.com/arition/openwrt-cups.git" >> feeds.conf.default
 - ./scripts/feeds update -a
 - ./scripts/feeds install cups
-- ./scripts/feeds install python-dev
+- if [ "$OSVER" = "OpenWrt_15.05" ]; then ./scripts/feeds install python; elif [ "$OSVER" = "LEDE_17.01" ]; then ./scripts/feeds install python-dev; fi
 - ./scripts/feeds install libsane
 - make defconfig
 - make package/python/compile -j3
